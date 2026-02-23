@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#1132d4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="InfinityV" />
+    <meta name="description" content="Institutional-Grade Assets for Everyone — Access fractional ownership in premium real estate and high-yield private credit." />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Infinity Ventures" />
+    <meta property="og:description" content="Access fractional ownership in premium real estate and high-yield private credit opportunities." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://infinityventures.app" />
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231132d4' rx='20' width='100' height='100'/><text x='50' y='72' font-family='Arial' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>I</text></svg>" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    
+    <title>Infinity Ventures</title>
+    
+    <style>
+      /* Critical CSS for instant load */
+      body { margin: 0; font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif; background: #f6f6f8; }
+      #root { min-height: 100vh; min-height: 100dvh; }
+      
+      /* Splash screen */
+      #splash {
+        position: fixed; inset: 0; z-index: 99999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, #1132d4 0%, #1e40af 100%);
+        transition: opacity 0.3s ease;
+      }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      #splash .logo { width: 64px; height: 64px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; color: #1132d4; margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+      #splash .name { color: white; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+      #splash .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 24px; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+
+  <body>
+    <!-- Splash screen shown while JS loads -->
+    <div id="splash">
+      <div class="logo">I</div>
+      <div class="name">Infinity Ventures</div>
+      <div class="spinner"></div>
+    </div>
+    
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <script>
+      // Hide splash when app is ready
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const splash = document.getElementById('splash');
+          if (splash) {
+            splash.classList.add('hide');
+            setTimeout(() => splash.remove(), 300);
+          }
+        }, 800);
+      });
+      
+      // Register service worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
