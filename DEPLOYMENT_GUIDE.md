@@ -156,7 +156,7 @@ git commit -m "chore: add .gitignore"
 
 # 전체 파일 추가
 git add .
-git commit -m "feat: Infinity Ventures MVP v2.1 — Full-stack RWA platform
+git commit -m "feat: Infinity Ventures MVP v3.0 — Full-stack RWA platform
 
 - User: signup, KYC, deposit, invest, portfolio, withdraw
 - Admin: dashboard, users, KYC, transactions, wallets, projects, yield
@@ -770,5 +770,5 @@ API_URL=https://infinityventures.com node test/simulate.mjs
 
 ---
 
-> 📌 이 가이드는 Infinity Ventures MVP v2.1 기준입니다.
+> 📌 이 가이드는 Infinity Ventures MVP v3.0 기준입니다.
 > 질문이나 문제가 있으면 언제든 문의해주세요.
