@@ -12,7 +12,7 @@ const isProd = process.env.NODE_ENV === 'production';
 // ═══════════════════════════════════════════════════════════════
 //  ① CORS — Dynamic Origin Validation + Preflight Caching
 // ═══════════════════════════════════════════════════════════════
-const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || '')
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'https://web-production-81df8.up.railway.app')
   .split(',').map(o => o.trim()).filter(Boolean);
 
 export function corsConfig() {
@@ -21,6 +21,7 @@ export function corsConfig() {
       if (!origin) return callback(null, true);   // Mobile/curl/server
       if (!isProd) return callback(null, true);    // Dev: allow all
       if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+            if (origin && origin.endsWith('.up.railway.app')) return callback(null, true); // Railway domains
       callback(new Error(`CORS: Origin ${origin} not allowed`));
     },
     credentials: true,
