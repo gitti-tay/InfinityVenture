@@ -55,16 +55,22 @@
     <div id="root"></div>
         <script type="module" src="/main.tsx"></script>
     <script>
-      // Hide splash when app is ready
-      window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-          const splash = document.getElementById('splash');
-          if (splash) {
-            splash.classList.add('hide');
-            setTimeout(() => splash.remove(), 300);
-          }
-        }, 800);
-      });
+            // Hide splash when app is ready - use window.load for production builds
+            function hideSplash() {
+                      setTimeout(() => {
+                                  const splash = document.getElementById('splash');
+                                  if (splash) {
+                                                splash.classList.add('hide');
+                                                setTimeout(() => splash.remove(), 300);
+                                  }
+                      }, 500);
+            }
+            if (document.readyState === 'complete') {
+                      hideSplash();
+            } else {
+                      window.addEventListener('load', hideSplash);
+            }
+    </script>
       
       // Register service worker for PWA
       if ('serviceWorker' in navigator) {
