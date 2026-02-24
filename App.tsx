@@ -4,6 +4,7 @@ import { WalletProvider } from '@/app/contexts/WalletContext';
 import { NotificationProvider } from '@/app/contexts/NotificationContext';
 import { ProtectedRoute, GuestRoute } from '@/app/guards/ProtectedRoute';
 import { AdminRoute } from '@/app/guards/AdminRoute';
+import { ResponsiveLayout } from '@/app/components/responsive-layout';
 
 // ─── Screens ──────────────────────────────────────────────────────
 import { WelcomeScreen } from '@/app/screens/welcome-screen';
@@ -61,6 +62,7 @@ export default function App() {
       <AuthProvider>
         <WalletProvider>
           <NotificationProvider>
+            <ResponsiveLayout>
             <div className="min-h-screen bg-background font-['Manrope',sans-serif]">
               <Routes>
                 {/* ── Public / Guest Routes ──────────────── */}
@@ -127,6 +129,7 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>
+            </ResponsiveLayout>
           </NotificationProvider>
         </WalletProvider>
       </AuthProvider>

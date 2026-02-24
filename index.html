@@ -20,7 +20,7 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231132d4' rx='20' width='100' height='100'/><text x='50' y='72' font-family='Arial' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>I</text></svg>" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
     
     <title>Infinity Ventures</title>
     
@@ -53,24 +53,19 @@
     </div>
     
     <div id="root"></div>
-        <script type="module" src="/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    
     <script>
-            // Hide splash when app is ready - use window.load for production builds
-            function hideSplash() {
-                      setTimeout(() => {
-                                  const splash = document.getElementById('splash');
-                                  if (splash) {
-                                                splash.classList.add('hide');
-                                                setTimeout(() => splash.remove(), 300);
-                                  }
-                      }, 500);
-            }
-            if (document.readyState === 'complete') {
-                      hideSplash();
-            } else {
-                      window.addEventListener('load', hideSplash);
-            }
-    </script>
+      // Hide splash when app is ready
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const splash = document.getElementById('splash');
+          if (splash) {
+            splash.classList.add('hide');
+            setTimeout(() => splash.remove(), 300);
+          }
+        }, 800);
+      });
       
       // Register service worker for PWA
       if ('serviceWorker' in navigator) {
