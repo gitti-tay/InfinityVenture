@@ -2,7 +2,7 @@
 # better-sqlite3 needs Python + build tools to compile native bindings
 
 [phases.setup]
-nixPkgs = ["nodejs_18", "python3", "gcc", "gnumake"]
+nixPkgs = ["nodejs_20", "python3", "gcc", "gnumake"]
 
 [phases.install]
 cmds = ["npm install"]
