@@ -137,8 +137,6 @@ export function ssrfGuard(req, res, next) {
 // ⑤ Security Headers + HSTS
 // ═══════════════════════════════════════════════════════════════
 export function securityHeaders(req, res, next) {
-    const nonce = crypto.randomBytes(16).toString('base64');
-    req.cspNonce = nonce;
     res.set({
           'X-Content-Type-Options': 'nosniff',
           'X-Frame-Options': 'DENY',
@@ -149,11 +147,11 @@ export function securityHeaders(req, res, next) {
           'X-Permitted-Cross-Domain-Policies': 'none',
           'Content-Security-Policy': [
                   "default-src 'self'",
-                  `script-src 'self' 'nonce-${nonce}'`,
+                  "script-src 'self' 'unsafe-inline'",
                   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                   "font-src 'self' https://fonts.gstatic.com data:",
                   "img-src 'self' https: data: blob:",
-                  "connect-src 'self' https:",
+                  "connect-src 'self' https://infinitv8.com https://www.infinitv8.com https://web-production-81df8.up.railway.app",
                   "frame-ancestors 'none'",
                   "base-uri 'self'",
                   "form-action 'self'",
@@ -161,7 +159,7 @@ export function securityHeaders(req, res, next) {
                   "upgrade-insecure-requests",
                 ].join('; '),
           'Cross-Origin-Opener-Policy': 'same-origin',
-          'Cross-Origin-Resource-Policy': 'same-origin',
+          'Cross-Origin-Resource-Policy': 'cross-origin',
     });
     if (req.path.startsWith('/api/')) {
           res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, private', 'Pragma': 'no-cache', 'Expires': '0' });
