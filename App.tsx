@@ -4,7 +4,7 @@ import { WalletProvider } from '@/app/contexts/WalletContext';
 import { NotificationProvider } from '@/app/contexts/NotificationContext';
 import { ProtectedRoute, GuestRoute } from '@/app/guards/ProtectedRoute';
 import { AdminRoute } from '@/app/guards/AdminRoute';
-import { ResponsiveLayout } from '@/app/components/responsive-layout';
+import { ResponsiveLayout } from '@/app/responsive-layout';
 
 // ─── Screens ──────────────────────────────────────────────────────
 import { WelcomeScreen } from '@/app/screens/welcome-screen';
