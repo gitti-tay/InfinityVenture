@@ -11,7 +11,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 // ═══════════════════════════════════════════════════════════════
 // ① CORS — Strict Origin Validation (SECURITY HARDENED)
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'https://infinitv8.com,https://www.infinitv8.com,https://web-production-81df8.up.railway.app')
   .split(',').map(o => o.trim()).filter(Boolean);
 
@@ -145,6 +145,7 @@ export function securityHeaders(req, res, next) {
           'Referrer-Policy': 'strict-origin-when-cross-origin',
           'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
           'X-Permitted-Cross-Domain-Policies': 'none',
+          'X-Download-Options': 'noopen',
           'Content-Security-Policy': [
                   "default-src 'self'",
                   "script-src 'self' 'unsafe-inline'",
@@ -376,4 +377,13 @@ export function timingSafeEqual(a, b) {
           return false;
     }
     return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
+
+        // ═══════════════════════════════════════════════════════════════
+// Cryptographically Secure Verification Code Generator
+// ═══════════════════════════════════════════════════════════════
+export function generateSecureCode(digits = 6) {
+    const min = Math.pow(10, digits - 1);
+    const max = Math.pow(10, digits) - 1;
+    return String(crypto.randomInt(min, max + 1));
 }
