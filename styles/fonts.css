@@ -1,2 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+/* Fonts are loaded via <link> tags in index.html to avoid duplicate requests.
+   - Manrope (400-800)
+   - Material Symbols Outlined
+   Do NOT add @import url() here — it causes duplicate font fetches and 503 errors.
+*/
