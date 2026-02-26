@@ -37,7 +37,7 @@ export function KYCStartScreen() {
     setIsSubmitting(true);
     try {
       // Call backend KYC start endpoint
-      await api.request('/auth/kyc/start', { method: 'POST' });
+      await api.kycStart();
       showSuccess('KYC Submitted', 'Your verification is being reviewed. This usually takes 1-2 business days.');
       setStep('submitted');
     } catch (err: any) {
