@@ -48,7 +48,7 @@ export function SettingsScreen() {
     if (!token) { setLoading(false); return; }
 
     // Fetch referral stats
-    fetch(API_BASE + '/referrals/stats', {
+    fetch(API_BASE + '/auth/referral-stats', {
       headers: { Authorization: 'Bearer ' + token }
     })
       .then(r => r.ok ? r.json() : { count: 0, bonus: 0 })
