@@ -30,11 +30,15 @@ export function DepositScreen() {
   const [txHash, setTxHash] = useState('');
   const [status, setStatus] = useState<WalletStatus | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
+  // Admin deposit wallets (where users send crypto)
+  const [adminWallets, setAdminWallets] = useState<any[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try { const res = await api.request('GET', '/wallet/status'); if (!cancelled) setStatus(res); } catch {}
+      
+        try { const wRes = await api.request('GET', '/transactions/deposit-addresses'); if (!cancelled) setAdminWallets(wRes.wallets || []); } catch {}
       if (!cancelled) setStatusLoading(false);
     })();
     return () => { cancelled = true; };
@@ -184,9 +188,24 @@ export function DepositScreen() {
             <div className="space-y-6">
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 text-center">
                 <p className="text-sm text-slate-500 mb-3">Send exactly <span className="font-bold text-foreground">${amount}</span> worth of {selectedMethod.id.toUpperCase()} to the platform deposit address.</p>
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
-                  <p className="text-[10px] text-amber-600 font-bold">Platform deposit address will be configured by admin.</p>
-                </div>
+                (() => {
+                  const cur = selectedMethod.id.toUpperCase();
+                  const aw = adminWallets.find(w => w.currency === cur);
+                  return aw ? (
+                    <div className="bg-slate-50 dark:bg-gray-700 p-4 rounded-xl mb-4 break-all">
+                      <p className="font-mono text-sm font-bold select-all">{aw.address}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{aw.label} · {aw.network}</p>
+                    </div>
+                  ) : (
+                    <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+                      <p className="text-[10px] text-amber-600 font-bold">No deposit address configured for {cur}. Please contact admin.</p>
+                    </div>
+                  );
+                })()}{adminWallets.find(w => w.currency === selectedMethod.id.toUpperCase())?.address && (
+                  <button onClick={() => { navigator.clipboard.writeText(adminWallets.find(w => w.currency === selectedMethod.id.toUpperCase())!.address); showSuccess('Copied!', 'Address copied to clipboard'); }} className="inline-flex items-center gap-2 text-[#1132d4] font-bold text-sm mb-3">
+                    <span className="material-symbols-outlined text-sm">content_copy</span>Copy Address
+                  </button>
+                )}
                 {depositAddr && <p className="text-xs text-slate-400 mt-2">Your wallet: {depositAddr.substring(0, 8)}...{depositAddr.substring(depositAddr.length - 6)}</p>}
               </div>
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
