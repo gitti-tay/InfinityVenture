@@ -9,7 +9,8 @@ import db, { getSetting, getSettingNumber, getSettingBool } from '../db.js';
 import { generateToken, authRequired, adminRequired, formatUser } from '../middleware/auth.js';
 import {
     auditLog, validateEmail, validatePassword,
-    authLimiter, bruteforceProtection, sensitiveOpLimiter
+    authLimiter, bruteforceProtection, sensitiveOpLimiter,
+    generateSecureCode
 } from '../middleware/security.js';
 
 const router = Router();
@@ -48,7 +49,8 @@ router.post('/signup', authLimiter, async (req, res) => {
       const id = 'u_' + crypto.randomBytes(12).toString('hex');
           const passwordHash = await bcrypt.hash(password, 12);
           const userReferralCode = 'IV' + crypto.randomBytes(4).toString('hex').toUpperCase();
-          const verificationCode = String(Math.floor(100000 + Math.random() * 900000));
+          // ★ SECURITY FIX: Use cryptographically secure random code instead of Math.random()
+        const verificationCode = generateSecureCode(6);
 
       db.prepare(`
             INSERT INTO users (id, email, password_hash, full_name, phone, referral_code, referred_by, verification_code)
@@ -320,7 +322,8 @@ router.post('/resend-verification', authRequired, sensitiveOpLimiter, (req, res)
                     return res.json({ success: true, message: 'Email already verified' });
               }
 
-              const newCode = String(Math.floor(100000 + Math.random() * 900000));
+              // ★ SECURITY FIX: Use cryptographically secure random code instead of Math.random()
+    const newCode = generateSecureCode(6);
     db.prepare("UPDATE users SET verification_code = ?, updated_at = datetime('now') WHERE id = ?")
       .run(newCode, req.user.id);
 
@@ -336,7 +339,8 @@ router.post('/forgot-password', authLimiter, (req, res) => {
     const user = db.prepare('SELECT id FROM users WHERE email = ?').get(email?.toLowerCase());
 
               if (user) {
-                    const resetCode = String(Math.floor(100000 + Math.random() * 900000));
+                    // ★ SECURITY FIX: Use cryptographically secure random code instead of Math.random()
+        const resetCode = generateSecureCode(6);
                     db.prepare("UPDATE users SET verification_code = ?, updated_at = datetime('now') WHERE id = ?")
                       .run(resetCode, user.id);
                     auditLog(user.id, 'auth.forgot_password', 'user', user.id, {}, req);
