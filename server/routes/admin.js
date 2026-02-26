@@ -54,6 +54,20 @@ router.get('/dashboard', (req, res) => {
     ORDER BY t.created_at DESC LIMIT 20
   `).all().map(formatTxAdmin);
 
+  // Recent signups (for admin dashboard real-time)
+  const recentUsers = db.prepare(`
+    SELECT id, email, full_name, role, kyc_status, email_verified, created_at
+    FROM users ORDER BY created_at DESC LIMIT 10
+  `).all().map(u => ({
+    id: u.id,
+    email: u.email,
+    fullName: u.full_name,
+    role: u.role,
+    kycStatus: u.kyc_status,
+    emailVerified: !!u.email_verified,
+    createdAt: u.created_at,
+  }));
+
   const dailyStats = db.prepare(`
     SELECT date(created_at) as day,
       SUM(CASE WHEN type='deposit' AND status='completed' THEN amount ELSE 0 END) as deposits,
@@ -77,6 +91,7 @@ router.get('/dashboard', (req, res) => {
         activeInvestments,
       },
       recentTransactions,
+          recentUsers,
       dailyStats,
     },
   });
