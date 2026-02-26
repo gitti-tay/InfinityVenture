@@ -667,4 +667,22 @@ router.post('/kyc/reject', authRequired, adminRequired, (req, res) => {
 });
 
 
+// ── GET /auth/referral-stats ──────────────────────────────────────
+router.get('/referral-stats', authRequired, (req, res) => {
+  try {
+    const count = db.prepare(
+      "SELECT COUNT(*) as c FROM referral_bonuses WHERE referrer_id = ?"
+    ).get(req.user.id)?.c || 0;
+
+    const bonus = db.prepare(
+      "SELECT COALESCE(SUM(bonus_amount), 0) as total FROM referral_bonuses WHERE referrer_id = ? AND status = 'credited'"
+    ).get(req.user.id)?.total || 0;
+
+    res.json({ success: true, count, bonus });
+  } catch (err) {
+    console.error('Referral stats error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
