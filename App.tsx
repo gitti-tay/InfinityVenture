@@ -26,6 +26,7 @@ import { QRScannerScreen } from '@/app/screens/qr-scanner-screen';
 import { BiometricRegistrationScreen } from '@/app/screens/biometric-registration-screen';
 import { ReferralRewardsScreen } from '@/app/screens/referral-rewards-screen';
 import { ForgotPasswordScreen } from '@/app/screens/forgot-password-screen';
+import { GoogleAuthSuccessScreen } from '@/app/screens/google-auth-success-screen';
 import { WithdrawalAddressesScreen } from '@/app/screens/withdrawal-addresses-screen';
 import { EmailVerificationScreen } from '@/app/screens/email-verification-screen';
 import { InvestAmountScreen } from '@/app/screens/invest-amount-screen';
@@ -70,6 +71,7 @@ export default function App() {
                 <Route path="/login" element={<GuestRoute><LoginScreen /></GuestRoute>} />
                 <Route path="/signup" element={<GuestRoute><SignUpScreen /></GuestRoute>} />
                 <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+                  <Route path="/auth/google/success" element={<GoogleAuthSuccessScreen />} />
 
                 {/* ── Onboarding (authenticated) ─────────── */}
                 <Route path="/email-verification" element={<ProtectedRoute><EmailVerificationScreen /></ProtectedRoute>} />
