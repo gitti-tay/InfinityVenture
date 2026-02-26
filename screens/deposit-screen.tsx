@@ -34,7 +34,7 @@ export function DepositScreen() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      try { const res = await api.request('/wallet/status'); if (!cancelled) setStatus(res); } catch {}
+      try { const res = await api.request('GET', '/wallet/status'); if (!cancelled) setStatus(res); } catch {}
       if (!cancelled) setStatusLoading(false);
     })();
     return () => { cancelled = true; };
