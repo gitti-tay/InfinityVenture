@@ -18,15 +18,19 @@ export function ProtectedRoute({ children, requireKYC = false }: ProtectedRouteP
 
   useEffect(() => {
     if (!isAuthenticated || isLoading) return;
+
     // Skip legal check for onboarding pages
     const skipPaths = ['/email-verification', '/connect-wallet', '/biometric-registration'];
     if (skipPaths.some(p => location.pathname.startsWith(p))) {
       setLegalChecked(true);
       return;
     }
+
     api.getLegalStatus().then(res => {
       const legal = res.legal;
-      const needsAcceptance = !legal?.termsOfService?.accepted || !legal?.privacyPolicy?.accepted || !legal?.riskDisclosure?.accepted;
+      const needsAcceptance = !legal?.termsOfService?.accepted ||
+        !legal?.privacyPolicy?.accepted ||
+        !legal?.riskDisclosure?.accepted;
       setShowLegal(needsAcceptance);
       setLegalChecked(true);
     }).catch(() => setLegalChecked(true));
@@ -53,7 +57,11 @@ export function ProtectedRoute({ children, requireKYC = false }: ProtectedRouteP
 
   return (
     <>
-      <LegalAcceptanceModal open={showLegal} onComplete={() => setShowLegal(false)} />
+      <LegalAcceptanceModal
+        open={showLegal}
+        onComplete={() => setShowLegal(false)}
+        onDismiss={() => setShowLegal(false)}
+      />
       {children}
     </>
   );
