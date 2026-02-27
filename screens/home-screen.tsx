@@ -11,9 +11,7 @@ function useApiGet<T>(path: string, token: string | null) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!token) { setLoading(false); return; }
-    fetch(API_BASE + path, {
-      headers: { Authorization: 'Bearer ' + token },
-    })
+    fetch(API_BASE + path, { headers: { Authorization: 'Bearer ' + token } })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(d => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
@@ -41,9 +39,9 @@ export function HomeScreen() {
 
   return (
     <PageWrapper>
-      <div className="space-y-6 pb-24">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+      <div className="space-y-6 pb-24 lg:pb-8 px-0 lg:px-4">
+        {/* Header - mobile only */}
+        <div className="lg:hidden flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">InfinityVentures</h1>
           </div>
@@ -64,8 +62,7 @@ export function HomeScreen() {
 
         {/* Connect Wallet Banner */}
         {!wallet && (
-          <button onClick={() => navigate('/connect-wallet')}
-            className="w-full flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-left">
+          <button onClick={() => navigate('/connect-wallet')} className="w-full flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-left">
             <span className="material-icons text-amber-600">link</span>
             <div>
               <p className="font-semibold text-amber-900">Connect Your Wallet</p>
@@ -117,14 +114,20 @@ export function HomeScreen() {
             <h3 className="text-lg font-bold">Opportunities</h3>
             <button onClick={() => navigate('/invest')} className="text-sm font-semibold text-blue-600">VIEW ALL</button>
           </div>
-          <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
-            {projects.length > 0 ? projects.slice(0, 5).map((p: any) => {
+          <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:mx-0 lg:px-0">
+            {projects.length > 0 ? projects.slice(0, 8).map((p: any) => {
               const plans = typeof p.plans === 'string' ? JSON.parse(p.plans) : p.plans || [];
               const topApy = plans.length > 0 ? Math.max(...plans.map((pl: any) => pl.apy || 0)) : 0;
               const topTerm = plans.length > 0 ? plans[Math.floor(plans.length / 2)]?.term || '12 Months' : '';
+              const riskText = p.risk || 'Medium Risk';
+              const riskColor = riskText.includes('Low') ? 'bg-green-100 text-green-700' :
+                riskText.includes('High') ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700';
               return (
-                <button key={p.id} onClick={() => navigate('/project/' + p.id)}
-                  className="min-w-[220px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden text-left flex-shrink-0">
+                <button
+                  key={p.id}
+                  onClick={() => navigate('/project/' + p.id)}
+                  className="min-w-[220px] lg:min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden text-left flex-shrink-0"
+                >
                   <img src={p.image} alt={p.name} className="w-full h-32 object-cover" />
                   <div className="p-3">
                     <p className="font-semibold text-sm">{p.symbol} — {p.name?.replace(p.symbol + ' — ', '')}</p>
@@ -136,11 +139,9 @@ export function HomeScreen() {
                       <div><span className="text-gray-400">APY</span><p className="font-bold text-blue-600">{topApy}%</p></div>
                       <div><span className="text-gray-400">TERM</span><p className="font-bold">{topTerm}</p></div>
                     </div>
-                    <span className={`inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-semibold ${
-                      p.riskLevel === 'Low' ? 'bg-green-100 text-green-700' :
-                      p.riskLevel === 'High' ? 'bg-red-100 text-red-700' :
-                      'bg-amber-100 text-amber-700'
-                    }`}>{p.riskLevel?.toUpperCase()} RISK</span>
+                    <span className={`inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-semibold ${riskColor}`}>
+                      {riskText.toUpperCase()}
+                    </span>
                   </div>
                 </button>
               );
