@@ -405,7 +405,7 @@ router.post('/login', authLimiter, bruteforceProtection, async (req, res) => {
 
     db.prepare(`INSERT INTO login_history (id, user_id, ip_address, user_agent, success)
       VALUES (?, ?, ?, ?, 1)`)
-      .run('lh_' + crypto.randomBytes(8).toString('hex'), user.id, req.ip, req.headers['user-agent'] || '', 1);
+      .run('lh_' + crypto.randomBytes(8).toString('hex'), user.id, req.ip, req.headers['user-agent'] || '');
 
     const token = generateToken(user.id, user.role);
 
