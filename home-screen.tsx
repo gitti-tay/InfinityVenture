@@ -8,17 +8,17 @@ export function HomeScreen() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { balance, totalPortfolioValue, monthlyYield, investments, wallet } = useWallet();
-  
+
   const totalInvested = investments.filter(i => i.status === 'active').reduce((s, i) => s + i.amount, 0);
   const growthPercent = totalInvested > 0 ? ((monthlyYield / totalInvested) * 100).toFixed(1) : '0.0';
-  
+
   const displayValue = totalPortfolioValue > 0
     ? `$${totalPortfolioValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     : `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  
+
   return (
     <PageWrapper>
-      <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#101322]/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-5 py-4 flex justify-between items-center">
+      <header className="lg:hidden sticky top-0 z-50 bg-white/90 dark:bg-[#101322]/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-5 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-[#1132d4] rounded-lg flex items-center justify-center text-white font-bold">I</div>
           <span className="font-bold text-lg">Infinity<span className="text-[#1132d4]">Ventures</span></span>
@@ -29,10 +29,7 @@ export function HomeScreen() {
               Admin
             </button>
           )}
-          <button 
-            onClick={() => navigate('/notifications')} 
-            className="relative p-1 text-slate-500"
-          >
+          <button onClick={() => navigate('/notifications')} className="relative p-1 text-slate-500">
             <span className="material-symbols-outlined">notifications</span>
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
@@ -41,8 +38,8 @@ export function HomeScreen() {
           </button>
         </div>
       </header>
-      
-      <main className="px-5 py-6 space-y-8 overflow-y-auto pb-24">
+
+      <main className="px-5 lg:px-8 py-6 space-y-8 overflow-y-auto pb-24 lg:pb-8">
         {/* Wallet Connection Alert */}
         {!wallet && (
           <button
@@ -57,7 +54,7 @@ export function HomeScreen() {
             <span className="material-symbols-outlined text-amber-400">chevron_right</span>
           </button>
         )}
-        
+
         {/* Portfolio Card */}
         <section className="bg-[#1132d4] rounded-2xl p-6 text-white relative overflow-hidden shadow-xl">
           <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
@@ -74,7 +71,8 @@ export function HomeScreen() {
               <div className="text-right">
                 <p className="text-white/60 text-[10px] uppercase">Growth</p>
                 <p className="font-bold text-lg text-emerald-300 flex items-center justify-end gap-1">
-                  <span className="material-symbols-outlined text-sm">trending_up</span> {growthPercent}%
+                  <span className="material-symbols-outlined text-sm">trending_up</span>
+                  {growthPercent}%
                 </p>
               </div>
             </div>
@@ -88,8 +86,8 @@ export function HomeScreen() {
             { label: 'Withdraw', path: '/withdraw', icon: 'currency_exchange', color: 'bg-blue-100 text-blue-600' },
             { label: 'Reports', path: '/reports', icon: 'analytics', color: 'bg-emerald-100 text-emerald-600' }
           ].map(action => (
-            <button 
-              key={action.label} 
+            <button
+              key={action.label}
               onClick={() => navigate(action.path)}
               className="flex flex-col items-center justify-center p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm active:scale-95 transition-transform"
             >
@@ -108,10 +106,7 @@ export function HomeScreen() {
               <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">Available Balance</p>
               <p className="text-lg font-bold text-emerald-900 dark:text-emerald-100">${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
             </div>
-            <button
-              onClick={() => navigate('/invest')}
-              className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold"
-            >
+            <button onClick={() => navigate('/invest')} className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
               Invest Now
             </button>
           </div>
@@ -121,24 +116,18 @@ export function HomeScreen() {
         <section>
           <div className="flex justify-between items-end mb-4">
             <h2 className="text-lg font-bold">Opportunities</h2>
-            <button 
-              onClick={() => navigate('/invest')} 
-              className="text-[#1132d4] text-xs font-bold uppercase"
-            >
+            <button onClick={() => navigate('/invest')} className="text-[#1132d4] text-xs font-bold uppercase">
               View All
             </button>
           </div>
-          
-          <div className="flex gap-4 overflow-x-auto -mx-5 px-5 pb-4">
+
+          <div className="flex gap-4 overflow-x-auto -mx-5 px-5 pb-4 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:mx-0 lg:px-0">
             {PROJECTS.map(p => (
-              <div 
-                key={p.id} 
-                className="min-w-[280px] bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md border border-gray-100 dark:border-gray-700 flex flex-col"
+              <div
+                key={p.id}
+                className="min-w-[280px] lg:min-w-0 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md border border-gray-100 dark:border-gray-700 flex flex-col"
               >
-                <div 
-                  onClick={() => navigate(`/project/${p.id}`)}
-                  className="cursor-pointer"
-                >
+                <div onClick={() => navigate(`/project/${p.id}`)} className="cursor-pointer">
                   <div className="h-32 rounded-xl overflow-hidden mb-3 relative">
                     <img className="w-full h-full object-cover" src={p.img} alt={p.name} />
                     <div className="absolute top-2 left-2 bg-white/90 px-2 py-0.5 rounded text-[10px] font-bold text-[#1132d4] uppercase">
@@ -147,7 +136,8 @@ export function HomeScreen() {
                   </div>
                   <h3 className="font-bold text-base mb-1 truncate">{p.name}</h3>
                   <p className="text-xs text-slate-500 mb-3 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">location_on</span> {p.region}
+                    <span className="material-symbols-outlined text-[14px]">location_on</span>
+                    {p.region}
                   </p>
                   <div className="grid grid-cols-2 gap-2 mb-3">
                     <div className="bg-slate-50 dark:bg-gray-700 p-2 rounded-lg">
@@ -169,7 +159,6 @@ export function HomeScreen() {
                     </div>
                   </div>
                 </div>
-                
                 <button
                   onClick={() => navigate('/invest-amount', { state: { project: p } })}
                   className="w-full bg-[#1132d4] text-white py-2.5 rounded-xl font-bold hover:bg-blue-700 transition-colors active:scale-95 flex items-center justify-center gap-2"
