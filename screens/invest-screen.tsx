@@ -8,7 +8,7 @@ export function InvestScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'apy' | 'min' | 'progress'>('apy');
   
-  const categories = ['All', 'Real Estate', 'Healthcare', 'Agriculture'];
+    const categories = ['All', 'Agriculture', 'Medical Device', 'Healthcare', 'Green Infrastructure', 'Real Estate'];
   
   const filteredProjects = selectedCategory === 'All' 
     ? PROJECTS 
@@ -122,6 +122,11 @@ export function InvestScreen() {
                       {project.badge}
                     </span>
                   )}
+                  {project.tokenType && (
+                                  <span className="px-2 py-0.5 bg-blue-600/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-white">
+                                    {project.tokenType === 'HYBRID' ? 'HYB' : project.tokenType === 'REVENUE_SHARE' ? 'RST' : 'INT'}
+                                  </span>span>
+                                  )}</span>
                 </div>
                 
                 {/* Project Name */}
@@ -161,6 +166,22 @@ export function InvestScreen() {
                     </p>
                   </div>
                 </div>
+
+                {/* Liquidity & Token Info */}
+                {project.liquidityRules && (
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase">Liquidity:</span>span>
+                                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-gray-700 rounded text-[10px] font-semibold text-slate-600 dark:text-gray-300">
+                                              {project.liquidityRules.primaryMode === 'INSTANT' ? '⚡ Instant' : project.liquidityRules.primaryMode === 'PERIODIC' ? '📅 Periodic' : project.liquidityRules.primaryMode === 'SLA' ? '⏱️ SLA' : '🔄 Secondary'}
+                                              {project.liquidityRules.maxProcessingDays ? ` (max ${project.liquidityRules.maxProcessingDays}d)` : ''}
+                                            </span>span>
+                          {project.liquidityRules.lockupMonths && (
+                                                <span className="px-2 py-0.5 bg-amber-50 dark:bg-amber-900/20 rounded text-[10px] font-semibold text-amber-700 dark:text-amber-400">
+                                                                        🔒 {project.liquidityRules.lockupMonths}mo lockup
+                                                </span>span>
+                                            )}
+                        </div>div>
+                              )}</div>
                 
                 {/* Progress Bar */}
                 <div className="mb-4">
