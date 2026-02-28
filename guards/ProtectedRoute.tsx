@@ -1,8 +1,11 @@
 import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useCallback } from 'react';
 import { LegalAcceptanceModal } from '../components/LegalAcceptanceModal';
 import api from '../api/client';
+
+const LEGAL_DISMISSED_KEY = 'iv_legal_dismissed';
+const LEGAL_ACCEPTED_KEY = 'iv_legal_accepted';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -10,27 +13,80 @@ interface ProtectedRouteProps {
   requireKYC?: boolean;
 }
 
+const isLegalDismissed = (): boolean => {
+  try {
+    return sessionStorage.getItem(LEGAL_DISMISSED_KEY) === 'true';
+  } catch {
+    return false;
+  }
+};
+
+const isLegalAccepted = (): boolean => {
+  try {
+    return localStorage.getItem(LEGAL_ACCEPTED_KEY) === 'true';
+  } catch {
+    return false;
+  }
+};
+
+const saveLegalDismissal = (): void => {
+  try {
+    sessionStorage.setItem(LEGAL_DISMISSED_KEY, 'true');
+  } catch {
+    // Silently fail if storage is unavailable
+  }
+};
+
+const saveLegalAcceptance = (): void => {
+  try {
+    localStorage.setItem(LEGAL_ACCEPTED_KEY, 'true');
+  } catch {
+    // Silently fail if storage is unavailable
+  }
+};
+
 export function ProtectedRoute({ children, requireKYC = false }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
   const [legalChecked, setLegalChecked] = useState(false);
   const [showLegal, setShowLegal] = useState(false);
 
+  const handleLegalComplete = useCallback(() => {
+    saveLegalAcceptance();
+    setShowLegal(false);
+  }, []);
+
+  const handleLegalDismiss = useCallback(() => {
+    saveLegalDismissal();
+    setShowLegal(false);
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated || isLoading) return;
 
-    // Skip legal check for onboarding pages
     const skipPaths = ['/email-verification', '/connect-wallet', '/biometric-registration'];
     if (skipPaths.some(p => location.pathname.startsWith(p))) {
       setLegalChecked(true);
       return;
     }
 
+    // Skip if already accepted or dismissed this session
+    if (isLegalAccepted() || isLegalDismissed()) {
+      setLegalChecked(true);
+      setShowLegal(false);
+      return;
+    }
+
     api.getLegalStatus().then(res => {
       const legal = res.legal;
-      const needsAcceptance = !legal?.termsOfService?.accepted ||
-        !legal?.privacyPolicy?.accepted ||
-        !legal?.riskDisclosure?.accepted;
+      const needsAcceptance = !legal?.termsOfService?.accepted
+        || !legal?.privacyPolicy?.accepted
+        || !legal?.riskDisclosure?.accepted;
+
+      if (!needsAcceptance) {
+        saveLegalAcceptance();
+      }
+
       setShowLegal(needsAcceptance);
       setLegalChecked(true);
     }).catch(() => setLegalChecked(true));
@@ -59,8 +115,8 @@ export function ProtectedRoute({ children, requireKYC = false }: ProtectedRouteP
     <>
       <LegalAcceptanceModal
         open={showLegal}
-        onComplete={() => setShowLegal(false)}
-        onDismiss={() => setShowLegal(false)}
+        onComplete={handleLegalComplete}
+        onDismiss={handleLegalDismiss}
       />
       {children}
     </>
