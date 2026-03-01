@@ -169,9 +169,9 @@ export function SettingsScreen() {
 
   return (
     <PageWrapper>
-      <header className="px-5 py-4 flex justify-between items-center bg-white/80 sticky top-0 z-10 backdrop-blur-md border-b border-gray-100">
-        <h1 className="text-xl font-bold">Profile & Settings</h1>
-        <button onClick={() => navigate('/home')} className="p-2 rounded-full hover:bg-gray-100">
+      <header className="px-5 py-4 flex justify-between items-center bg-white/80 dark:bg-gray-900/80 sticky top-0 z-10 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+        <h1 className="text-xl font-bold dark:text-white">Profile & Settings</h1>
+        <button onClick={() => navigate('/home')} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300">
           <span className="material-icons">close</span>
         </button>
       </header>
@@ -233,7 +233,7 @@ export function SettingsScreen() {
               className={`p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${
                 activeSection === section.id
                   ? 'bg-[#1132d4] text-white shadow-lg'
-                  : 'bg-white border border-slate-100'
+                  : 'bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 dark:text-gray-300'
               }`}
             >
               <span className="material-icons text-2xl">{section.icon}</span>
@@ -242,41 +242,41 @@ export function SettingsScreen() {
           ))}
         </div>
 
-        <div className="px-5 space-y-6">
+        <div className="px-5 space-y-6 dark:text-gray-200">
 
           {/* Profile Section */}
           {activeSection === 'profile' && (
             <div className="space-y-4">
-              <h3 className="font-bold text-lg">Personal Information</h3>
-              <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100">
+              <h3 className="font-bold text-lg dark:text-white">Personal Information</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-100 dark:border-gray-700 divide-y divide-slate-100 dark:divide-gray-700">
                 <div className="p-4 flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 uppercase mb-1">Full Name</p>
-                    <p className="font-bold">{userName}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase mb-1">Full Name</p>
+                    <p className="font-bold dark:text-white">{userName}</p>
                   </div>
-                  <button onClick={() => openModal('editName')} className="p-2 hover:bg-slate-100 rounded-lg">
-                    <span className="material-icons text-slate-400">edit</span>
+                  <button onClick={() => openModal('editName')} className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg">
+                    <span className="material-icons text-slate-400 dark:text-slate-500">edit</span>
                   </button>
                 </div>
                 <div className="p-4 flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 uppercase mb-1">Email Address</p>
-                    <p className="font-bold">{userEmail}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase mb-1">Email Address</p>
+                    <p className="font-bold dark:text-white">{userEmail}</p>
                   </div>
                 </div>
                 <div className="p-4 flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 uppercase mb-1">Phone Number</p>
-                    <p className="font-bold">{userPhone || 'Not set'}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase mb-1">Phone Number</p>
+                    <p className="font-bold dark:text-white">{userPhone || 'Not set'}</p>
                   </div>
-                  <button onClick={() => openModal('editPhone')} className="p-2 hover:bg-slate-100 rounded-lg">
-                    <span className="material-icons text-slate-400">edit</span>
+                  <button onClick={() => openModal('editPhone')} className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg">
+                    <span className="material-icons text-slate-400 dark:text-slate-500">edit</span>
                   </button>
                 </div>
               </div>
 
               {/* KYC Verification - Real status */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-100">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-slate-100 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="font-bold">KYC Verification</h4>
                   {kycVerified ? (
@@ -325,14 +325,14 @@ export function SettingsScreen() {
               </div>
 
               {/* Referral Program - Real data */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-100">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-slate-100 dark:border-gray-700">
                 <h4 className="font-bold mb-4">Referral Program</h4>
                 {referralCode ? (
                   <>
-                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 mb-3">
+                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-4 mb-3">
                       <p className="text-xs text-slate-600 mb-2">Your Referral Code</p>
                       <div className="flex items-center gap-2">
-                        <code className="flex-1 bg-white px-3 py-2 rounded-lg font-mono font-bold text-center">
+                        <code className="flex-1 bg-white dark:bg-gray-700 dark:text-white px-3 py-2 rounded-lg font-mono font-bold text-center">
                           {referralCode}
                         </code>
                         <button onClick={copyReferralCode} className="p-2 bg-[#1132d4] text-white rounded-lg">
@@ -359,12 +359,12 @@ export function SettingsScreen() {
           {/* Security Section */}
           {activeSection === 'security' && (
             <div className="space-y-4">
-              <h3 className="font-bold text-lg">Security Settings</h3>
-              <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100">
+              <h3 className="font-bold text-lg dark:text-white">Security Settings</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-100 dark:border-gray-700 divide-y divide-slate-100 dark:divide-gray-700">
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <p className="font-bold mb-1">Two-Factor Authentication</p>
+                      <p className="font-bold mb-1 dark:text-white">Two-Factor Authentication</p>
                       <p className="text-xs text-slate-500">Add an extra layer of security</p>
                     </div>
                     <button
@@ -382,7 +382,7 @@ export function SettingsScreen() {
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-bold mb-1">Biometric Login</p>
+                      <p className="font-bold mb-1 dark:text-white">Biometric Login</p>
                       <p className="text-xs text-slate-500">Use fingerprint or face ID</p>
                     </div>
                     <button
@@ -399,28 +399,28 @@ export function SettingsScreen() {
                 </div>
                 <button
                   onClick={() => openModal('changePassword')}
-                  className="p-4 flex items-center justify-between w-full hover:bg-slate-50 transition-colors"
+                  className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <div>
-                    <p className="font-bold mb-1 text-left">Change Password</p>
-                    <p className="text-xs text-slate-500 text-left">Update your password</p>
+                    <p className="font-bold mb-1 text-left dark:text-white">Change Password</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 text-left">Update your password</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
                 <button
                   onClick={() => navigate('/withdrawal-addresses')}
-                  className="p-4 flex items-center justify-between w-full hover:bg-slate-50 transition-colors"
+                  className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <div>
-                    <p className="font-bold mb-1 text-left">Withdrawal Addresses</p>
-                    <p className="text-xs text-slate-500 text-left">Manage whitelisted addresses</p>
+                    <p className="font-bold mb-1 text-left dark:text-white">Withdrawal Addresses</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 text-left">Manage whitelisted addresses</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
               </div>
 
               {/* Wallet Connection */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-100">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-slate-100 dark:border-gray-700">
                 <h4 className="font-bold mb-4">Wallet Connection</h4>
                 {wallet ? (
                   <div className="space-y-3">
@@ -457,8 +457,8 @@ export function SettingsScreen() {
           {/* Notifications Section */}
           {activeSection === 'notifications' && (
             <div className="space-y-4">
-              <h3 className="font-bold text-lg">Notification Preferences</h3>
-              <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100">
+              <h3 className="font-bold text-lg dark:text-white">Notification Preferences</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-100 dark:border-gray-700 divide-y divide-slate-100 dark:divide-gray-700">
                 {[
                   { id: 'push', label: 'Push Notifications', desc: 'Receive alerts on your device' },
                   { id: 'email', label: 'Email Notifications', desc: 'Get updates via email' },
@@ -470,7 +470,7 @@ export function SettingsScreen() {
                 ].map((item) => (
                   <div key={item.id} className="p-4 flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="font-bold mb-1">{item.label}</p>
+                      <p className="font-bold mb-1 dark:text-white">{item.label}</p>
                       <p className="text-xs text-slate-500">{item.desc}</p>
                     </div>
                     <button
@@ -492,44 +492,44 @@ export function SettingsScreen() {
           {/* Preferences Section */}
           {activeSection === 'preferences' && (
             <div className="space-y-4">
-              <h3 className="font-bold text-lg">App Preferences</h3>
-              <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100">
-                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50">
+              <h3 className="font-bold text-lg dark:text-white">App Preferences</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-100 dark:border-gray-700 divide-y divide-slate-100 dark:divide-gray-700">
+                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700">
                   <div>
                     <p className="font-bold text-left">Language</p>
-                    <p className="text-xs text-slate-500 text-left">English (US)</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 text-left">English (US)</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
-                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50">
+                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700">
                   <div>
                     <p className="font-bold text-left">Currency</p>
-                    <p className="text-xs text-slate-500 text-left">USD ($)</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 text-left">USD ($)</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
               </div>
-              <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100">
-                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-100 dark:border-gray-700 divide-y divide-slate-100 dark:divide-gray-700">
+                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700">
                   <div className="flex items-center gap-3">
                     <span className="material-icons text-[#1132d4]">help</span>
-                    <p className="font-bold">Help & Support</p>
+                    <p className="font-bold dark:text-white">Help & Support</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
-                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50">
+                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700">
                   <div className="flex items-center gap-3">
                     <span className="material-icons text-[#1132d4]">policy</span>
-                    <p className="font-bold">Terms & Privacy</p>
+                    <p className="font-bold dark:text-white">Terms & Privacy</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
-                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50">
+                <button className="p-4 flex items-center justify-between w-full hover:bg-slate-50 dark:hover:bg-gray-700">
                   <div className="flex items-center gap-3">
                     <span className="material-icons text-[#1132d4]">info</span>
-                    <p className="font-bold">About InfinityVentures</p>
+                    <p className="font-bold dark:text-white">About InfinityVentures</p>
                   </div>
-                  <span className="material-icons text-slate-400">chevron_right</span>
+                  <span className="material-icons text-slate-400 dark:text-slate-500">chevron_right</span>
                 </button>
               </div>
 
@@ -540,7 +540,7 @@ export function SettingsScreen() {
                   showSuccess('Logged Out', 'You have been signed out');
                   navigate('/');
                 }}
-                className="w-full bg-red-50 text-red-600 py-4 rounded-xl font-bold flex items-center justify-center gap-2 border border-red-200"
+                className="w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 py-4 rounded-xl font-bold flex items-center justify-center gap-2 border border-red-200 dark:border-red-800"
               >
                 <span className="material-icons">logout</span>
                 Log Out
@@ -554,22 +554,22 @@ export function SettingsScreen() {
       {/* Modals */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeModal}>
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl" onClick={(e: any) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl" onClick={(e: any) => e.stopPropagation()}>
             {/* Edit Name/Email/Phone Modal */}
             {(activeModal === 'editName' || activeModal === 'editEmail' || activeModal === 'editPhone') && (
               <>
-                <h3 className="text-xl font-bold mb-4">
+                <h3 className="text-xl font-bold mb-4 dark:text-white">
                   Edit {activeModal === 'editName' ? 'Name' : activeModal === 'editEmail' ? 'Email' : 'Phone'}
                 </h3>
                 <input
                   type={activeModal === 'editEmail' ? 'email' : activeModal === 'editPhone' ? 'tel' : 'text'}
                   value={editFormData.value}
                   onChange={(e: any) => setEditFormData({ value: e.target.value })}
-                  className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 bg-white mb-4 focus:border-[#1132d4] outline-none"
+                  className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white mb-4 focus:border-[#1132d4] outline-none"
                   placeholder={`Enter ${activeModal === 'editName' ? 'name' : activeModal === 'editEmail' ? 'email' : 'phone'}`}
                 />
                 <div className="flex gap-3">
-                  <button onClick={closeModal} className="flex-1 py-3 rounded-xl bg-slate-100 font-bold">Cancel</button>
+                  <button onClick={closeModal} className="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-gray-700 font-bold dark:text-white">Cancel</button>
                   <button onClick={handleSaveProfile} className="flex-1 py-3 rounded-xl bg-[#1132d4] text-white font-bold">Save</button>
                 </div>
               </>
@@ -578,32 +578,32 @@ export function SettingsScreen() {
             {/* Change Password Modal */}
             {activeModal === 'changePassword' && (
               <>
-                <h3 className="text-xl font-bold mb-4">Change Password</h3>
+                <h3 className="text-xl font-bold mb-4 dark:text-white">Change Password</h3>
                 <div className="space-y-3 mb-4">
                   <input
                     type="password"
                     placeholder="Current Password"
                     value={passwordForm.current}
                     onChange={(e: any) => setPasswordForm({ ...passwordForm, current: e.target.value })}
-                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 bg-white focus:border-[#1132d4] outline-none"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:border-[#1132d4] outline-none"
                   />
                   <input
                     type="password"
                     placeholder="New Password"
                     value={passwordForm.new}
                     onChange={(e: any) => setPasswordForm({ ...passwordForm, new: e.target.value })}
-                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 bg-white focus:border-[#1132d4] outline-none"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:border-[#1132d4] outline-none"
                   />
                   <input
                     type="password"
                     placeholder="Confirm New Password"
                     value={passwordForm.confirm}
                     onChange={(e: any) => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
-                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 bg-white focus:border-[#1132d4] outline-none"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:border-[#1132d4] outline-none"
                   />
                 </div>
                 <div className="flex gap-3">
-                  <button onClick={closeModal} className="flex-1 py-3 rounded-xl bg-slate-100 font-bold">Cancel</button>
+                  <button onClick={closeModal} className="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-gray-700 font-bold dark:text-white">Cancel</button>
                   <button onClick={handleChangePassword} className="flex-1 py-3 rounded-xl bg-[#1132d4] text-white font-bold">Update</button>
                 </div>
               </>
