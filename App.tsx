@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
+
 import { AuthProvider } from '@/app/contexts/AuthContext';
 import { WalletProvider } from '@/app/contexts/WalletContext';
 import { NotificationProvider } from '@/app/contexts/NotificationContext';
 import { ProtectedRoute, GuestRoute } from '@/app/guards/ProtectedRoute';
 import { AdminRoute } from '@/app/guards/AdminRoute';
 import { ResponsiveLayout } from '@/app/responsive-layout';
+import { ErrorBoundary } from '@/app/components/error-boundary';
 
 // ─── Screens ──────────────────────────────────────────────────────
 import { WelcomeScreen } from '@/app/screens/welcome-screen';
@@ -60,81 +62,82 @@ import { AdminProjectWalletsScreen } from '@/app/screens/admin/admin-project-wal
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <WalletProvider>
-          <NotificationProvider>
-            <ResponsiveLayout>
-            <div className="min-h-screen bg-background font-['Manrope',sans-serif]">
-              <Routes>
-                {/* ── Public / Guest Routes ──────────────── */}
-                <Route path="/" element={<GuestRoute><WelcomeScreen /></GuestRoute>} />
-                <Route path="/login" element={<GuestRoute><LoginScreen /></GuestRoute>} />
-                <Route path="/signup" element={<GuestRoute><SignUpScreen /></GuestRoute>} />
-                <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-                  <Route path="/auth/google/success" element={<GoogleAuthSuccessScreen />} />
+      <ErrorBoundary>
+        <AuthProvider>
+          <WalletProvider>
+            <NotificationProvider>
+              <ResponsiveLayout>
+                <div className="min-h-screen bg-background font-['Manrope',sans-serif]">
+                  <Routes>
+                    {/* ── Public / Guest Routes ──────────────── */}
+                    <Route path="/" element={<GuestRoute><WelcomeScreen /></GuestRoute>} />
+                    <Route path="/login" element={<GuestRoute><LoginScreen /></GuestRoute>} />
+                    <Route path="/signup" element={<GuestRoute><SignUpScreen /></GuestRoute>} />
+                    <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+                    <Route path="/auth/google/success" element={<GoogleAuthSuccessScreen />} />
 
-                {/* ── Onboarding (authenticated) ─────────── */}
-                <Route path="/email-verification" element={<ProtectedRoute><EmailVerificationScreen /></ProtectedRoute>} />
-                <Route path="/connect-wallet" element={<ProtectedRoute><ConnectWalletScreen /></ProtectedRoute>} />
-                <Route path="/qr-scanner" element={<ProtectedRoute><QRScannerScreen /></ProtectedRoute>} />
-                <Route path="/biometric-registration" element={<ProtectedRoute><BiometricRegistrationScreen /></ProtectedRoute>} />
-                <Route path="/kyc-start" element={<ProtectedRoute><KYCStartScreen /></ProtectedRoute>} />
+                    {/* ── Onboarding (authenticated) ─────────── */}
+                    <Route path="/email-verification" element={<ProtectedRoute><EmailVerificationScreen /></ProtectedRoute>} />
+                    <Route path="/connect-wallet" element={<ProtectedRoute><ConnectWalletScreen /></ProtectedRoute>} />
+                    <Route path="/qr-scanner" element={<ProtectedRoute><QRScannerScreen /></ProtectedRoute>} />
+                    <Route path="/biometric-registration" element={<ProtectedRoute><BiometricRegistrationScreen /></ProtectedRoute>} />
+                    <Route path="/kyc-start" element={<ProtectedRoute><KYCStartScreen /></ProtectedRoute>} />
 
-                {/* ── Main App Routes (Protected) ─────────── */}
-                <Route path="/home" element={<ProtectedRoute><HomeScreen /></ProtectedRoute>} />
-                <Route path="/invest" element={<ProtectedRoute><InvestScreen /></ProtectedRoute>} />
-                <Route path="/project/:id" element={<ProtectedRoute><ProjectDetailsScreen /></ProtectedRoute>} />
-                <Route path="/portfolio" element={<ProtectedRoute><PortfolioScreen /></ProtectedRoute>} />
-                <Route path="/wallet" element={<ProtectedRoute><WalletScreen /></ProtectedRoute>} />
-                <Route path="/settings" element={<ProtectedRoute><SettingsScreen /></ProtectedRoute>} />
-                <Route path="/withdrawal-addresses" element={<ProtectedRoute><WithdrawalAddressesScreen /></ProtectedRoute>} />
-                <Route path="/notifications" element={<ProtectedRoute><NotificationsScreen /></ProtectedRoute>} />
+                    {/* ── Main App Routes (Protected) ─────────── */}
+                    <Route path="/home" element={<ProtectedRoute><HomeScreen /></ProtectedRoute>} />
+                    <Route path="/invest" element={<ProtectedRoute><InvestScreen /></ProtectedRoute>} />
+                    <Route path="/project/:id" element={<ProtectedRoute><ProjectDetailsScreen /></ProtectedRoute>} />
+                    <Route path="/portfolio" element={<ProtectedRoute><PortfolioScreen /></ProtectedRoute>} />
+                    <Route path="/wallet" element={<ProtectedRoute><WalletScreen /></ProtectedRoute>} />
+                    <Route path="/settings" element={<ProtectedRoute><SettingsScreen /></ProtectedRoute>} />
+                    <Route path="/withdrawal-addresses" element={<ProtectedRoute><WithdrawalAddressesScreen /></ProtectedRoute>} />
+                    <Route path="/notifications" element={<ProtectedRoute><NotificationsScreen /></ProtectedRoute>} />
 
-                {/* ── Financial Operations (Protected) ─────── */}
-                <Route path="/deposit" element={<ProtectedRoute><DepositScreen /></ProtectedRoute>} />
-                <Route path="/deposit-success" element={<ProtectedRoute><DepositSuccessScreen /></ProtectedRoute>} />
-                <Route path="/withdraw" element={<ProtectedRoute><WithdrawScreen /></ProtectedRoute>} />
-                <Route path="/withdraw-success" element={<ProtectedRoute><WithdrawSuccessScreen /></ProtectedRoute>} />
-                <Route path="/reports" element={<ProtectedRoute><ReportsScreen /></ProtectedRoute>} />
-                <Route path="/transaction-history" element={<ProtectedRoute><TransactionHistoryScreen /></ProtectedRoute>} />
+                    {/* ── Financial Operations (Protected) ─────── */}
+                    <Route path="/deposit" element={<ProtectedRoute><DepositScreen /></ProtectedRoute>} />
+                    <Route path="/deposit-success" element={<ProtectedRoute><DepositSuccessScreen /></ProtectedRoute>} />
+                    <Route path="/withdraw" element={<ProtectedRoute><WithdrawScreen /></ProtectedRoute>} />
+                    <Route path="/withdraw-success" element={<ProtectedRoute><WithdrawSuccessScreen /></ProtectedRoute>} />
+                    <Route path="/reports" element={<ProtectedRoute><ReportsScreen /></ProtectedRoute>} />
+                    <Route path="/transaction-history" element={<ProtectedRoute><TransactionHistoryScreen /></ProtectedRoute>} />
 
-                {/* ── Investment Flow (Protected) ─────────── */}
-                <Route path="/invest-amount" element={<ProtectedRoute><InvestAmountScreen /></ProtectedRoute>} />
-                <Route path="/invest-review" element={<ProtectedRoute><InvestReviewScreen /></ProtectedRoute>} />
-                <Route path="/invest-success" element={<ProtectedRoute><InvestSuccessScreen /></ProtectedRoute>} />
+                    {/* ── Investment Flow (Protected) ─────────── */}
+                    <Route path="/invest-amount" element={<ProtectedRoute><InvestAmountScreen /></ProtectedRoute>} />
+                    <Route path="/invest-review" element={<ProtectedRoute><InvestReviewScreen /></ProtectedRoute>} />
+                    <Route path="/invest-success" element={<ProtectedRoute><InvestSuccessScreen /></ProtectedRoute>} />
 
-                {/* ── Account & Settings (Protected) ──────── */}
-                <Route path="/referral-rewards" element={<ProtectedRoute><ReferralRewardsScreen /></ProtectedRoute>} />
-                <Route path="/payment-methods" element={<ProtectedRoute><PaymentMethodsScreen /></ProtectedRoute>} />
-                <Route path="/documents" element={<ProtectedRoute><DocumentsScreen /></ProtectedRoute>} />
-                <Route path="/document/:documentId" element={<ProtectedRoute><DocumentViewerScreen /></ProtectedRoute>} />
-                <Route path="/preferences" element={<ProtectedRoute><PreferencesScreen /></ProtectedRoute>} />
-                <Route path="/project/:projectId/documents" element={<ProtectedRoute><ProjectDocumentsScreen /></ProtectedRoute>} />
-                <Route path="/my-investment/:id" element={<ProtectedRoute><MyInvestmentDetailScreen /></ProtectedRoute>} />
+                    {/* ── Account & Settings (Protected) ──────── */}
+                    <Route path="/referral-rewards" element={<ProtectedRoute><ReferralRewardsScreen /></ProtectedRoute>} />
+                    <Route path="/payment-methods" element={<ProtectedRoute><PaymentMethodsScreen /></ProtectedRoute>} />
+                    <Route path="/documents" element={<ProtectedRoute><DocumentsScreen /></ProtectedRoute>} />
+                    <Route path="/document/:documentId" element={<ProtectedRoute><DocumentViewerScreen /></ProtectedRoute>} />
+                    <Route path="/preferences" element={<ProtectedRoute><PreferencesScreen /></ProtectedRoute>} />
+                    <Route path="/project/:projectId/documents" element={<ProtectedRoute><ProjectDocumentsScreen /></ProtectedRoute>} />
+                    <Route path="/my-investment/:id" element={<ProtectedRoute><MyInvestmentDetailScreen /></ProtectedRoute>} />
 
-                {/* ── Admin Panel ─────────────────────────── */}
-                <Route path="/admin/login" element={<AdminLoginScreen />} />
-                <Route path="/admin" element={<AdminRoute><AdminDashboardScreen /></AdminRoute>} />
-                <Route path="/admin/users" element={<AdminRoute><AdminUsersScreen /></AdminRoute>} />
-                <Route path="/admin/transactions" element={<AdminRoute><AdminTransactionsScreen /></AdminRoute>} />
-                <Route path="/admin/kyc" element={<AdminRoute><AdminKYCScreen /></AdminRoute>} />
-                <Route path="/admin/wallets" element={<AdminRoute><AdminWalletsScreen /></AdminRoute>} />
-                <Route path="/admin/projects" element={<AdminRoute><AdminProjectsScreen /></AdminRoute>} />
-                <Route path="/admin/support" element={<AdminRoute><AdminSupportScreen /></AdminRoute>} />
-                <Route path="/admin/yield" element={<AdminRoute><AdminYieldScreen /></AdminRoute>} />
-                <Route path="/admin/compliance" element={<AdminRoute><AdminComplianceScreen /></AdminRoute>} />
-                <Route path="/admin/project-wallets" element={<AdminRoute><AdminProjectWalletsScreen /></AdminRoute>} />
-                <Route path="/admin/settings" element={<AdminRoute><AdminSettingsScreen /></AdminRoute>} />
-                <Route path="/admin/audit" element={<AdminRoute><AdminAuditScreen /></AdminRoute>} />
+                    {/* ── Admin Panel ─────────────────────────── */}
+                    <Route path="/admin/login" element={<AdminLoginScreen />} />
+                    <Route path="/admin" element={<AdminRoute><AdminDashboardScreen /></AdminRoute>} />
+                    <Route path="/admin/users" element={<AdminRoute><AdminUsersScreen /></AdminRoute>} />
+                    <Route path="/admin/transactions" element={<AdminRoute><AdminTransactionsScreen /></AdminRoute>} />
+                    <Route path="/admin/kyc" element={<AdminRoute><AdminKYCScreen /></AdminRoute>} />
+                    <Route path="/admin/wallets" element={<AdminRoute><AdminWalletsScreen /></AdminRoute>} />
+                    <Route path="/admin/projects" element={<AdminRoute><AdminProjectsScreen /></AdminRoute>} />
+                    <Route path="/admin/support" element={<AdminRoute><AdminSupportScreen /></AdminRoute>} />
+                    <Route path="/admin/yield" element={<AdminRoute><AdminYieldScreen /></AdminRoute>} />
+                    <Route path="/admin/compliance" element={<AdminRoute><AdminComplianceScreen /></AdminRoute>} />
+                    <Route path="/admin/project-wallets" element={<AdminRoute><AdminProjectWalletsScreen /></AdminRoute>} />
+                    <Route path="/admin/settings" element={<AdminRoute><AdminSettingsScreen /></AdminRoute>} />
+                    <Route path="/admin/audit" element={<AdminRoute><AdminAuditScreen /></AdminRoute>} />
 
-                {/* ── Fallback ───────────────────────────── */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </div>
-            </ResponsiveLayout>
-          </NotificationProvider>
-        </WalletProvider>
-      </AuthProvider>
+                    {/* ── Fallback ───────────────────────────── */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </div>
+              </ResponsiveLayout>
+            </NotificationProvider>
+          </WalletProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </BrowserRouter>
   );
-}
