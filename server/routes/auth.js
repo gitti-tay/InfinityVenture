@@ -211,9 +211,18 @@ router.get('/google/callback', async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(sessionId, user.id, tokenHash, req.ip, req.headers['user-agent'] || '', expiresAt);
 
-    // Redirect to frontend with token
-    // The frontend AuthContext will pick up the token from the URL
-    res.redirect(`/auth/google/success?token=${encodeURIComponent(token)}`);
+    // Redirect to frontend — token set in HttpOnly cookie
+    // The frontend AuthContext will pick up the token from the cookie
+    // SECURITY FIX C-4: Set token as HttpOnly cookie instead of URL parameter
+    // This prevents token leakage via browser history, Referer headers, and server logs
+    res.cookie('iv_auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: maxAgeDays * 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+    res.redirect('/auth/google/success');
 
   } catch (err) {
     console.error('[Google OAuth] Callback error:', err);
