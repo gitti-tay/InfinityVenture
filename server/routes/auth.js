@@ -231,6 +231,28 @@ router.get('/google/callback', async (req, res) => {
 });
 
 
+
+// ── GET /auth/google/exchange ─── Exchange HttpOnly cookie for token response ──
+// Called by frontend after Google OAuth redirect to /auth/google/success
+// The browser sends the iv_auth_token cookie automatically; authRequired reads it
+router.get('/google/exchange', authRequired, (req, res) => {
+  // Cookie-based auth was validated by authRequired middleware
+  // Return the token and user info so frontend can store in localStorage
+  const cookieToken = req.cookies?.iv_auth_token;
+  if (!cookieToken) {
+    return res.status(401).json({ error: 'No auth cookie present' });
+  }
+  
+  // Clear the HttpOnly cookie after exchanging (one-time use)
+  res.clearCookie('iv_auth_token', { path: '/' });
+  
+  res.json({
+    success: true,
+    token: cookieToken,
+    user: req.user,
+    message: 'Google OAuth login successful',
+  });
+});
 // ── POST /auth/signup ──────────────────────────────────────────────
 router.post('/signup', authLimiter, async (req, res) => {
   try {
