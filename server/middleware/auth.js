@@ -62,11 +62,14 @@ export function verifyToken(token) {
 // ═══════════════════════════════════════════════════════════════
 export function authRequired(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  // SECURITY FIX C-4: Also accept token from HttpOnly cookie (Google OAuth flow)
+  const cookieToken = req.cookies?.iv_auth_token;
+  
+  if ((!authHeader || !authHeader.startsWith('Bearer ')) && !cookieToken) {
     return res.status(401).json({ error: 'Authentication required' });
   }
 
-  const token = authHeader.slice(7);
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : cookieToken;
   if (!token || token.length > 2048) {
     return res.status(401).json({ error: 'Invalid token format' });
   }
@@ -177,10 +180,11 @@ export function ownershipCheck(userId, resourceOwnerId) {
 // ═══════════════════════════════════════════════════════════════
 export function authOptional(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) return next();
+  const cookieToken = req.cookies?.iv_auth_token;
+  if ((!authHeader || !authHeader.startsWith('Bearer ')) && !cookieToken) return next();
 
   try {
-    const token = authHeader.slice(7);
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : cookieToken;
     const decoded = verifyToken(token);
     const userId = decoded.sub || decoded.userId;
     const user = db.prepare(`
