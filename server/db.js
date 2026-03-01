@@ -477,7 +477,10 @@ const adminExists = db.prepare("SELECT id FROM users WHERE role IN ('admin','sup
 
 if (!adminExists) {
   const adminId = 'u_admin_' + crypto.randomBytes(8).toString('hex');
-  const adminPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'Admin@2024!Secure';
+  const adminPassword = process.env.ADMIN_DEFAULT_PASSWORD;
+  if (!adminPassword || adminPassword.length < 12) {
+    console.error('[SECURITY] ADMIN_DEFAULT_PASSWORD env var not set or too short (min 12 chars). Skipping admin creation.');
+  } else {
   const adminHash = bcrypt.hashSync(adminPassword, 12);
 
   db.prepare(`
@@ -511,9 +514,9 @@ if (!adminExists) {
     );
   }
 
-  console.log(`\n🔑 Default admin created: ${process.env.ADMIN_EMAIL || 'admin@infinityventures.com'}`);
-  console.log(`   Password: ${adminPassword}`);
-  console.log(`   ⚠️  CHANGE THIS IN PRODUCTION via ADMIN_EMAIL & ADMIN_DEFAULT_PASSWORD env vars\n`);
+  console.log('[INFO] Default admin created: ' + (process.env.ADMIN_EMAIL || 'admin@infinityventures.com'));
+    console.log('  Password set from ADMIN_DEFAULT_PASSWORD env var (not logged for security)');
+  }
 }
 
 // ─── Seed Projects (if none exist) ───────────────────────────────
