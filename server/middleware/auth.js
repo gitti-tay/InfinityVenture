@@ -12,18 +12,21 @@ const isProd = process.env.NODE_ENV === 'production';
 // ═══════════════════════════════════════════════════════════════
 //  ⑩ Secret Management + Validation
 // ═══════════════════════════════════════════════════════════════
-const JWT_SECRET = process.env.JWT_SECRET || 'iv-secret-key-change-in-production-2024';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// ★ SECURITY FIX C-1: No hardcoded default — require env var in ALL environments
+if (!JWT_SECRET) {
+  console.error('[CRITICAL] JWT_SECRET environment variable is NOT set. Server cannot start safely.');
+  process.exit(1);
+}
 const JWT_EXPIRES = process.env.JWT_EXPIRES || '7d';
 const JWT_ISSUER = 'infinity-ventures';
 const JWT_AUDIENCE = 'iv-api';
 
-// Startup check: warn if secret is weak
-if (isProd && JWT_SECRET.length < 32) {
-  console.error('[CRITICAL] JWT_SECRET is too short (<32 chars). Set a strong secret via env var!');
-  process.exit(1);
-}
-if (!isProd && JWT_SECRET === 'iv-secret-key-change-in-production-2024') {
-  console.warn('[WARN] Using default JWT_SECRET. Set JWT_SECRET env var for production.');
+// ★ SECURITY: Validate secret strength at startup
+if (JWT_SECRET.length < 32) {
+  console.error('[CRITICAL] JWT_SECRET is too short (<32 chars). Use a strong random secret (64+ chars recommended).');
+  if (isProd) process.exit(1);
 }
 
 // ═══════════════════════════════════════════════════════════════
